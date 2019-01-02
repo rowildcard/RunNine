@@ -15,10 +15,12 @@
 
 import Foundation
 
-let fromRC : String
-let toRC   : String
+var fromRC : String
+var toRC   : String
 let rows = 4                //  number of sets plus 1 blank set
 let cols = 9
+let rowRange = 1...rows
+let colRange = 1...cols
 let set  = 100
 var gameBoard = [Int]()     //  num cells = rows * cols
 var gameTiles = [Int]()     //  Tiles numbered 1-(col) repeated (rows) times
@@ -49,6 +51,8 @@ class Tile {
 //       set  = 1 = code / 100
 //       tile = 7 = code - (set * 100)
 //
+var allTiles = [Tile]()
+
 for x in 1...rows {
     for y in 1...cols {
         gameTiles.append(y + (x * set))
@@ -70,6 +74,13 @@ func TranslateTileCode(_ v:Int) -> String {
         return(setColor[s] + String(val))
     }
                 
+}
+
+func ValidCellEntry(row r:String, col c:String) -> Bool {
+    if (rowRange.contains( Int(r)! ) && colRange.contains( Int(c)! ) ) {
+        return true
+    }
+    else { return false }
 }
 
 //  - Shuffle tiles
@@ -110,16 +121,31 @@ for j in 0..<rows {
 
 //  Prompt for from-R/C
 print("Enter the FROM RC -> ")
-fromRC = readLine()!
+var validInput = true
 
 //  - validate
+while (validInput) {
 
+    fromRC = readLine()!
+    let fr : Character = fromRC.removeFirst()
+    let fc = fromRC
+    
+    if (ValidCellEntry(row:String(fr), col:fc)) {
+    print("Invalid entry.")
+    print("Enter the Row value and Column value for the tile you want to move.")
+    print("Ex. 12 = Row 1, Column 2 contains tile ", "xx", terminator:".")
+    fromRC = readLine()!
+    }
+}
+CFConvertDoubleHostToSwapped(<#T##arg: Double##Double#>)
 //  Prompt for to-R/C
 
 print("Enter the TO RC -> ")
 toRC = readLine()!
 
 //  - validate
+var tr : Character = toRC.removeFirst()
+var tc = toRC
 
 //  Validate tile move
 //  - valid R/C entry?
